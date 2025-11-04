@@ -27,9 +27,9 @@ promise.then((msg)=>console.log(msg))
 
 fetch("https://jsonplaceholder.typicode.com/posts/1")
   .then((response) => response.json())
-  .then((data) => { console.log("✅ API Data Received:", data);
+  .then((data) => { console.log("API Data Received:", data);
   })
-  .catch((error) => { console.error("❌ API Error:", error);
+  .catch((error) => { console.error(" API Error:", error);
  });
 
  
