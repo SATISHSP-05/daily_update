@@ -34,6 +34,22 @@ fetch("https://jsonplaceholder.typicode.com/posts/1")
 
  
 
+// chaining promise
+new Promise ((resolve)=>{
+    resolve(10);
+})
+.then((num)=>{
+    console.log("number1",num);
+    return num+1;
+})
+.then((num)=>{
+    console.log("number2",num);
+    return num+1;
+})
+.then((num)=>{
+    console.log("final",num);
+    return num;
+})
 
 
 
