@@ -33,6 +33,7 @@ fetch("https://jsonplaceholder.typicode.com/posts/1")
  });
 
  
+// to checkout in the git 
 
 // chaining promise
 new Promise ((resolve)=>{
