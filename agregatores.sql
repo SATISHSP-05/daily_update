@@ -12,7 +12,7 @@ GROUP BY Continent;
 SELECT Region, SUM(Population) AS TotalPopulation
 FROM country
 GROUP BY Region;
-
+    
 -- maximum
 SELECT Continent, MAX(Population) AS MaxPopulation
 FROM country
