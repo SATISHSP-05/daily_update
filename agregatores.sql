@@ -29,9 +29,10 @@ FROM country
 GROUP BY Continent
 
 
---having
+--havings
 SELECT Region, SUM(Population) AS TotalPopulation
 FROM country
 GROUP BY Region
 HAVING SUM(Population) > 100000000;
+
 
