@@ -1,0 +1,279 @@
+1. Explain var, let, and const differences.
+      ->  like var is container used to store the data value such are number ,text is a given to a memory location whre data is stored.
+   there are 3 types mainly
+   var
+   let
+   const
+ var : is the oldest way to declare the variable var is the function scope and can be redeclared and reassigned
+ function scope : available  inside the whole function not just inside block
+
+ let : let is introduced in Es6 , let is the block-scope it can be reassigned but not redeclared
+
+ const : let is introduced in Es6 , const is the block-scope it can not reassigned and redeclared.
+ 
+ ->var example
+    var name = "Satish";
+   console.log(name);
+
+   function test() {
+   var x = 10;
+   console.log(x);
+}
+test();
+
+-> let example
+      let age = 20;
+    console.log(age); 
+
+     age = 21; 
+    console.log(age); 
+
+->  const example
+    const pi = 3.14;
+    console.log(pi);
+
+2.  What is hoisting?
+    hosting is the machanism where variable and fucntion declaration move on the top of their scope during compilation before executing 
+    in variable , var is hoisted  the default value is undefined and we can access it before the declaration 
+     let is also hoisted  the default value is uninitialized its TDZ and access before declaration not allowed 
+     const is also hoisted  the default value is uninitialized its TDZ and access before declaration not allowed 
+     
+     TDZ : means the time between the hoisting and the actual initialization 
+    
+     function declaraion is the hoisted default value shows is access before declaration 
+     function expression  is partially hoisted the default vaue is undefined access before declation it shows type error
+     arror function is also partially hoisted defaukt value uninitialized and access before declaration refference error
+
+   example var 
+         console.log(a);   
+         var a = 10;
+         console.log("After:", a);
+ 
+   example let 
+        console.log(b); 
+        let b = 20;
+
+   example const 
+       console.log(c); 
+       const c = 30;
+
+   example function declaraion 
+        greet(); 
+        function greet() {
+        console.log("Hello from function declaration!");
+                          }
+
+   example of function expression 
+          
+        sum();
+      var sum = function() {
+      console.log("Function Expression");
+            };
+    
+     example of the arrow funtion
+          add(); 
+          let add = () => {
+          console.log("Arrow Function");
+                };
+
+3.  Difference between == and ===.
+     == is loose equality operatore it compare two values for equality but ignore the data types 
+   === is strict equality operatore it compare both vaues and data types 
+
+            example ==
+        console.log(5 == "5");  true
+
+            example ===    
+        console.log(5 === "5");  false 
+
+4.  Explain the difference between primitive and non-primitive data types.
+      primitive datatype :- it is basic building block it hold the single value at a time ,the values stores directly in thr memory , 
+      and it is immutable means the value can not change directly 
+       types of primitives are numbers,strings,boolean ,null 
+      
+      non primitive is also colled reference type that can hold the multiple valuse at a time ,values can not store directly in memory
+      and it is mutable means the value can not change value
+       types array function object 
+
+      example Primitive
+ 
+      let num1 = 10;
+      let num2 = num1;
+      num2 = 20;
+
+      let str1 = "Hello";
+      let str2 = str1;
+      str2 = "World";
+
+      let bool1 = true;
+      let bool2 = bool1;
+      bool2 = false;
+
+      let n1 = null;
+      let n2 = n1;
+
+      example Non-Primitive
+
+      let arr1 = [1, 2, 3];
+      let arr2 = arr1;
+      arr2.push(4);
+
+      let obj1 = { name: "Satish", age: 22 };
+      let obj2 = obj1;
+      obj2.age = 23;
+
+      let fun1 = function () { return 100; };
+      let fun2 = fun1;
+
+5. Explain the this keyword.
+      This keyword in JavaScript refers to the object that is executing the current function.
+ The value of this is determined by how a function is called.
+
+     async function greet() {
+     return "Hello!";
+     }
+
+     greet().then(msg => console.log(msg));
+
+
+     async function wait() {
+       console.log("Wait");
+       let result = await new Promise(resolve =>
+         setTimeout(() => resolve(" Done"), 2000)
+       );
+       console.log(result);
+     }
+
+     wait();
+
+
+     let myPromise = new Promise((resolve, reject) => {
+       let success = true;
+     
+       if (success) {
+         resolve("Operation successful ");
+       } else {
+         reject("Something went wrong ");
+       }
+     });
+
+     myPromise     
+     .then(res => console.log(res))
+     .catch(err => console.log(err));
+
+6.  Explain closures? What are its advantages?
+      A closure is a function that has access to its own scope, the outer function's scope, and the global scope.
+Closures are useful for maintaining state in an application, creating private variables, and implementing data encapsulation.
+
+
+       example closure
+
+
+       function counter(){
+         let count = 0; 
+         return function () {   
+           count++;
+           console.log(count);
+         };
+       }
+
+       let increment = counter();
+       increment(); 
+       increment(); 
+       increment(); 
+
+
+       example 2
+   
+       function greet(name) {        
+         return function () {       
+           console.log("Hello, " + name);
+         };
+       }
+
+       let sayHi = greet("Satish");
+
+       sayHi(); 
+
+
+7.  What is an IIFE?
+      IIFE stands for Immediately Invoked Function Expression.
+      It is a JavaScript function that is executed as soon as it is defined. 
+      It is typically used to create a new scope to avoid polluting the global namespace.
+
+        (function () {
+        console.log("IIFE executed immediately!");
+        })();
+
+
+      (function (name) {
+      console.log("Hello, " + name);
+       })("Satish");
+
+
+8. What are Higher order functions?
+      Higher order functions are functions that operate on other functions by taking them as arguments or returning them. 
+They enable functional programming concepts like composition, currying, and lazy evaluation.
+  types of higher order function are
+  map(),reduce(),filter(),foreach()
+
+map() is a method used with array to create a new array by performing specific opareation on the each element of original array
+    
+      let number=[1,2,3,4,5,]
+      let result= number.map(num=>num*2)
+      console.log(result);  
+
+foreach() is a method is used to loop through the each element of an array and run the function on every element and 
+avoid use of for loop.
+
+     const number=[1,2,3,4,5]
+     number.forEach(function(num){
+     console.log("num",num);
+
+filter() is a method used with array  to create a new array containig only the that test pass elements  provided by the function
+
+     const number=[1,2,3,4,5]
+let result = number.filter(num => num>3)
+       console.log(result)
+
+reduce() is method is used to reduse all the array elements into a single value 
+
+     const number=[1,2,3,4,5]
+       const total =number.reduce((acc,curr)=> acc+curr,0)
+          console.log(total);
+
+
+
+9. What is prototype chaining?
+    Prototype chaining is the mechanism in JavaScript where an object inherits properties and methods from its prototype object, 
+which in turn can inherit from another prototype object. This creates a chain of prototypes, allowing for hierarchical inheritance.   
+       const person = {
+  greet() {
+    console.log("Hello, I am a person.");
+  }
+};
+const student = {
+  study() {
+    console.log("I am studying.");
+  }
+};
+Object.setPrototypeOf(student, person); 
+student.study();  
+student.greet();
+
+10.  What is the prototype? 
+     The prototype is an object that is associated with every function and object in JavaScript. 
+It is used to add properties and methods to objects, and it is also used in prototype chaining.
+    
+ function Person(name, age) {
+  this.name = name;     
+  this.age = age;        
+}
+Person.prototype.introduce = function () {
+  console.log("Hi, I am " + this.name + " and I am " + this.age + " years old.");
+};
+const p1 = new Person("Satish", 25);
+const p2 = new Person("Kumar", 30);
+p1.introduce(); 
+p2.introduce(); 
+------------------------------------------------------end--------------------------------------------------------------------        
