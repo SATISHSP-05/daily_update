@@ -12,8 +12,10 @@ const doubled = nums.map(n => n * 2);
 console.log(doubled); 
 
 
+
 const sayHello = () => console.log("Hello!");
 sayHello();
+
 
 const add = (a, b) => a + b;
 console.log(add(5, 3));
@@ -25,41 +27,9 @@ console.log(result);
 
 
 
-2. Synthetic Event
-
-A Synthetic Event is a cross-browser wrapper around the browser’s native event.
-It is mainly used in React to make all events work the same way across different browsers.
-React creates an object called SyntheticEvent that
-normalizes event properties (target, type, bubbles, etc.)
-improves performance using event pooling (older versions)
-makes events consistent and predictable
-To avoid browser compatibility issues
-To handle events the same way on all browsers
-To improve performance by managing events efficiently
-To use one unified event system
-
-example :
-function App() {
-  const handleClick = (event) => {
-    console.log("Button clicked!");
-    console.log("Synthetic Event object:", event);
-    console.log("Native Event object:", event.nativeEvent); 
-  };
-  return (
-    <button onClick={handleClick}>
-      Click Me
-    </button>
-  );
-}
-export default App;
-
 3.callback
 A callback is a function passed as an argument to another function.
 It allows one function to run after another function has finished its execution.
-Callbacks are used when:
-you want to run code later
-you want to handle asynchronous operations (API calls, file read, timers)
-you want to avoid repeating logic
 
 example:
 
@@ -84,7 +54,8 @@ setTimeout(() => {
 
 4.Callback Hell
 Callback Hell is a situation in JavaScript where too many nested callbacks make the code look messy,
-hard to read, and difficult to maintain. This usually happens in asynchronous operations when callbacks are written inside other callbacks.
+hard to read, and difficult to maintain. 
+This usually happens in asynchronous operations when callbacks are written inside other callbacks.
 
  example :
  setTimeout(() => {
@@ -109,47 +80,7 @@ let → can be updated
 const → cannot be reassigned
 Both are block scoped, unlike var.
 
-Example:
-let num = 10;
-const PI = 3.14;
 
-Arrow Functions
-Shorter function syntax with lexical this.
-Example:
-const add = (a, b) => a + b;
-
-Template Literals
-Used for easy string formatting & multiline strings.
-Example:
-const name = "satish";
-console.log(`Welcome, ${name}`);
-
-Default Parameters
-Set a default value when no argument is passed.
-Example:
-function greet(name = "Guest") {
-  console.log("Hello", name);
-}
-
-Spread Operator (...)
-Expands arrays or objects.
-Example:
-const nums = [1, 2, 3];
-const copy = [...nums];
-
-Rest Parameters
-Combines multiple arguments into one array. 
-Example:
-function sum(...numbers) {
-  console.log(numbers);
-}
-sum(1, 2, 3);
-
- Destructuring (Array & Object)
-Extract values easily.
-Example:
-const person = { name: "satish", age: 22 };
-const { name, age } = person;
 
 
 6. explain Promise
@@ -179,6 +110,7 @@ promise()
   .then(result => console.log(result))
   .catch(error => console.log(error));
 
+
 7. What is async/await 
 async/await is a cleaner and more readable way to work with Promises.
 async → makes a function return a Promise
@@ -200,79 +132,13 @@ async function showData() {
 }
 showData();
 
-7. DOM
-DOM (Document Object Model) is a programming interface for HTML.
-It represents the entire webpage as a tree of objects, where every element (like <div>, <p>, <button>, etc.) 
-becomes a node that JavaScript can access and modify.
-Because it lets JavaScript:
-Change text
-Change CSS styles
-Add or remove HTML elements
-Handle user actions (click, input, submit, etc.)
-Function :
-document.getElementById()
-Finds an element using its id.
-
-Example:
-document.querySelectorAll("p").forEach(p => {
-  p.style.color = "blue";
-});
-
-document.createElement()
-Creates new HTML elements dynamically.
-Example:
-const btn = document.createElement("button");
-btn.innerText = "Click Me";
-document.body.appendChild(btn);
-
-appendChild()
-Adds a new child element into the DOM.
-document.body.appendChild(btn);
-
-remove()
-Removes an element from the DOM.
-document.getElementById("msg").remove();
-
-addEventListener()
-Used to handle user actions like click, input, etc.
-Example:
-document.getElementById("btn").addEventListener("click", function() {
-  alert("Button clicked!");
-});
-
-innerText / innerHTML (Content Update)
-document.getElementById("msg").innerText = "Updated text";
-document.getElementById("msg").innerHTML = "<b>Bold text</b>";
 
 
-8. Refactor a JS program using closures to avoid undefined output.
-Here's an example of refactoring a program using closures to avoid undefined output:
-function createCounter() {
-    let count = 0;
-    return function() {
-        return ++count;
-    };
-}
-const counter = createCounter();
-console.log(counter()); 
-console.log(counter()); 
-console.log(counter()); 
 
 
-9. Write a program to remove duplicates from a list.
-function removeDuplicates(arr) {
-    return [...new Set(arr)];
-}
-const list = [1, 2, 3, 1, 2, 4, 5];
-const uniqueList = removeDuplicates(list);
-console.log(uniqueList);  
 
 
-10.Display data in the console from an API.
-fetch('https://api.example.com/data')
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error fetching data:', error));
+
 
 ---------------------------------------------------end------------------------------------------------------------------
 
