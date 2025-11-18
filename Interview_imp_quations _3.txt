@@ -1,0 +1,129 @@
+1. What are Higher order functions?
+   Higher order functions is the function that take another function as an argumnet  either  return a function as its result.
+It used to make code reusable and cleaner to handle asynchronous operations easily like callback promises.
+
+types of higher order function are
+  map(),reduce(),filter(),foreach()
+
+map() is a method used with array to create a new array by performing specific opareation on the each element of original array
+    
+      let number=[1,2,3,4,5,]
+      let result= number.map(num=>num*2)
+      console.log(result);  
+
+foreach() is a method is used to loop through the each element of an array and run the function on every element and 
+avoid use of for loop.
+
+     const number=[1,2,3,4,5]
+     number.forEach(function(num){
+     console.log("num",num);
+
+filter() is a method used with array  to create a new array containig only the that test pass elements  provided by the function
+
+     const number=[1,2,3,4,5]
+let result = number.filter(num => num>3)
+       console.log(result)
+
+reduce() is method is used to reduse all the array elements into a single value 
+
+     const number=[1,2,3,4,5]
+       const total =number.reduce((acc,curr)=> acc+curr,0)
+          console.log(total);
+
+
+
+2.  What is the prototype? 
+        The prototype is an object that is associated with every function and object in JavaScript. 
+prototype in javaScript each object has a prototype which serves the template for creating a new object.
+It is used to add properties and methods to objects, and it is also used in 
+prototype chaining. 
+
+
+prototype chaining  i sthe process of travaersing the prototype chain to access the propertice anad method of an objects
+ prototype and its parent prototype
+
+Prototype Inheritance is mechanism where one object can access properties and methods of another object using the prototype chain.
+
+__proto__ is used with object  instanse means referse to its parant prototype
+
+Function Prototype is an automatically created object property available only on functions.
+It contains an object that becomes the prototype of all instances created using the new keyword.
+
+
+example :-
+const grandParent = { a: 1 };        
+const parent = Object.create(grandParent); 
+const child = Object.create(parent);      
+
+console.log(child.a);  
+
+
+
+example:-
+
+function Animal() {}
+Animal.prototype.eat = function () {
+  return "Eating...";
+};
+function Dog() {}
+Dog.prototype = Object.create(Animal.prototype);
+const d = new Dog();
+console.log(d.eat()); 
+
+
+3. this keyword 
+
+this keyword js refer to object the object that is executing the current function .the value of the this determained by how a function os called.
+
+Global Context  :- When this is used outside any function or inside a function , it refers to the global object.  
+
+function Context :- when a regular function is called without any object, this automatically refers to the global object
+
+Arrow Functions :Arrow functions do not create their own this. They take this from the surrounding (lexical) scope.
+
+this in Constructor Function :- In constructor functions or ES6 classes, this refers to the newly created object.
+
+Method Context :-When a function is called as a method of an object, this refers to that object.
+
+Explicit Binding (call, apply, bind)
+
+.call() → pass arguments one by one
+
+.apply() → pass arguments in array
+
+.bind() → returns new function with fixed this
+
+
+example:-
+function greet() {
+  console.log("Hello " + this.name);
+}
+
+const user = { name: "Satish" };
+
+greet.call(user); 
+
+
+
+example:-
+ const user = {
+  name: "Satish",
+  getName() {
+    console.log(this.name);
+  }
+};
+user.getName(); 
+
+
+example:-
+function Person(name) {
+  this.name = name;
+}
+
+const p = new Person("Satish");
+console.log(p.name); 
+
+
+
+
+                                                                  END                                                                                 
