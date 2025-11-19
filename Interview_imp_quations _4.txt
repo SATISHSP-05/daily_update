@@ -38,6 +38,7 @@ console.log(clothingGST(2000));
 
 
 
+
 -:filter industrial level example:-
 const products = [
   { name: "Shoes", price: 1500 },
@@ -51,7 +52,7 @@ console.log(under1000);
 
 
 
-types of higher order function are
+ types of higher order function are
   map(),reduce(),filter(),foreach()
 
 map() is a method used with array to create a new array by performing specific opareation on the each element of original array
@@ -88,7 +89,7 @@ a join in sql is used to combine the row from two or more tables based on a rela
 
 types of joins are 
 
-inner join :- INNER JOIN returns only those rows where the values in the joining column match in both tables.
+inner join :-Returns only the rows that match in both tables.
 If there is no match, the row is not included in the final result.
 example :-
 
@@ -143,7 +144,7 @@ CROSS JOIN Orders o;
 
 
 
-self join :- SELF JOIN is when a table is joined with itself using an alias (e1, e2).
+self join :- SELF JOIN is when a table is joined with itself using an alias .
 It is used when table rows have a relationship with other rows in the same table—like employees with managers. 
 
 
@@ -199,11 +200,12 @@ GROUP BY Continent;
 
 
 
-
 data controll commands 
 
 grant :- is used to give or assing specific permisson to users  on the data base objects
  the main purpose is to allow the users to perfom the action like slect, insert, update and  delete  etc...
+
+
 
 
 syntax is 
@@ -219,8 +221,6 @@ syntax is
  revoke permission _type 
 on table_ name
 to user_name
-
-
 
 
 
