@@ -1,0 +1,232 @@
+Higher-order function
+ function takes another function as an argument OR It returns another function as a result.
+
+
+-:function as an argument:-
+
+function applyDiscount(price, discountFunction) {
+  return discountFunction(price);
+}
+
+function festivalDiscount(price) {
+  return price * 0.80; 
+}
+
+function couponDiscount(price) {
+  return price - 100; 
+}
+
+console.log(applyDiscount(1000, festivalDiscount)); 
+console.log(applyDiscount(1000, couponDiscount));   
+
+
+
+-:returns another function:-
+
+function taxCalculator(gstRate) {
+  return function (amount) {
+    return amount + (amount * gstRate);
+  };
+}
+
+const electronicsGST = taxCalculator(0.18);
+const clothingGST = taxCalculator(0.05);
+
+console.log(electronicsGST(2000)); 
+console.log(clothingGST(2000));    
+
+
+
+
+-:filter industrial level example:-
+const products = [
+  { name: "Shoes", price: 1500 },
+  { name: "T-Shirt", price: 700 },
+  { name: "Watch", price: 900 }
+];
+
+const under1000 = products.filter(p => p.price < 1000);
+
+console.log(under1000);
+
+
+
+types of higher order function are
+  map(),reduce(),filter(),foreach()
+
+map() is a method used with array to create a new array by performing specific opareation on the each element of original array
+    
+      let number=[1,2,3,4,5,]
+      let result= number.map(num=>num*2)
+      console.log(result);  
+
+foreach() is a method is used to loop through the each element of an array and run the function on every element and 
+avoid use of for loop.
+
+ const number = [1, 2, 3, 4, 5];
+ number.forEach(function(num) {
+  console.log("num:", num);
+});
+
+
+filter() is a method used with array  to create a new array containig only the that test pass elements  provided by the function
+
+     const number=[1,2,3,4,5]
+let result = number.filter(num => num>3)
+       console.log(result)
+
+reduce() is method is used to reduse all the array elements into a single value 
+
+     const number=[1,2,3,4,5]
+       const total =number.reduce((acc,curr)=> acc+curr,0)
+          console.log(total);
+
+
+join commands 
+
+a join in sql is used to combine the row from two or more tables based on a related column between them
+
+types of joins are 
+
+inner join :- INNER JOIN returns only those rows where the values in the joining column match in both tables.
+If there is no match, the row is not included in the final result.
+example :-
+
+
+SELECT c.customer_id, c.first_name, o.item, o.amount
+FROM Customers c
+INNER JOIN Orders o
+ON c.customer_id = o.customer_id;
+
+
+
+full outer join :- FULL JOIN returns all rows from both tables, whether they match or not.
+Matched rows are combined; non-matching rows are filled with NULL on the side where no match exists.
+
+SELECT c.customer_id, c.first_name, o.item
+FROM Customers c
+LEFT JOIN Orders o
+ON c.customer_id = o.customer_id
+
+UNION
+
+SELECT c.customer_id, c.first_name, o.item
+FROM Customers c
+RIGHT JOIN Orders o
+ON c.customer_id = o.customer_id;
+
+
+left join :- returns all rows from the left table, along with only the matching rows from the  right table.
+If the right table has no corresponding match, SQL fills the left columns with NULL.
+
+SELECT c.customer_id, c.first_name, o.item, o.amount
+FROM Customers c
+LEFT JOIN Orders o
+ON c.customer_id = o.customer_id;
+
+
+right join :- returns all rows from the right table, along with only the matching rows from the left table.
+If the left table has no corresponding match, SQL fills the left columns with NULL.
+
+SELECT c.customer_id, c.first_name, o.item, o.amount
+FROM Customers c
+RIGHT JOIN Orders o
+ON c.customer_id = o.customer_id;
+
+
+cross join :- CROSS JOIN creates a Cartesian product, meaning every row in the first table is paired with every row in the second table.
+No relationship or condition is required.
+
+SELECT c.first_name, o.item
+FROM Customers c
+CROSS JOIN Orders o;
+
+
+
+self join :- SELF JOIN is when a table is joined with itself using an alias (e1, e2).
+It is used when table rows have a relationship with other rows in the same table—like employees with managers. 
+
+
+SELECT A.first_name AS person1, B.first_name AS person2, A.country
+FROM Customers A
+JOIN Customers B
+ON A.country = B.country
+AND A.customer_id <> B.customer_id;
+
+
+
+
+
+aggregate functions 
+
+aggregate function perform calculations on the group of row and return a single value as the result
+they are commonly used with group by
+
+
+ type of aggregatores are 
+
+count () :-returns the numbers of rows that match a condition 
+example:- 
+SELECT Continent, COUNT(Name) AS TotalCountries
+FROM country
+GROUP BY Continent;
+
+
+avg() :- return the avrage value of a numearic column
+example:- 
+SELECT Continent, AVG(LifeExpectancy) AS AvgLifeExpectancy
+FROM country
+GROUP BY Continent;
+
+sum() :- return the total sum of  numeric column
+example:-
+SELECT Region, SUM(Population) AS TotalPopulation
+FROM country
+GROUP BY Region;
+
+min() :- return the smallest value in the column 
+example:-
+SELECT Continent, MIN(GNP) AS MinGNP
+FROM country
+GROUP BY Continent;
+
+max() :- return the largest value in the column     
+example:-
+SELECT Continent, MAX(Population) AS MaxPopulation
+FROM country
+GROUP BY Continent;
+
+
+
+
+
+data controll commands 
+
+grant :- is used to give or assing specific permisson to users  on the data base objects
+ the main purpose is to allow the users to perfom the action like slect, insert, update and  delete  etc...
+
+
+syntax is 
+ grant permission _type 
+on table_ name
+to user_name
+
+
+
+revoke :-   is used to remove previosly granted permission from user 
+
+syntax is 
+ revoke permission _type 
+on table_ name
+to user_name
+
+
+
+
+
+
+
+
+ 
+ 
+
