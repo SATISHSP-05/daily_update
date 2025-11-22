@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Advanced Quiz - Part 2</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .body { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            min-height: 100vh; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .card { 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15); 
+            border: none; 
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        .card:hover { transform: translateY(-3px); }
+        .bg-gradient { background: linear-gradient(135deg, #667eea, #764ba2) !important; }
+        
+        .quiz-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: none;
+            animation: slideIn 0.5s ease-in-out;
+        }
+        
+        .question-card.active {
+            display: block;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .option:hover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+            transform: translateX(5px);
+        }
+        
+        .option.selected {
+            background: #e3f2fd;
+            border-color: #2196f3;
+            color: #1976d2;
+            font-weight: 500;
+        }
+        
+        .option.correct {
+            background: #e8f5e8;
+            border-color: #4caf50;
+            color: #2e7d32;
+        }
+        
+        .option.incorrect {
+            background: #ffebee;
+            border-color: #f44336;
+            color: #c62828;
+        }
+        
+        .option.correct::after {
+            content: "✓";
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4caf50;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .option.incorrect::after {
+            content: "✗";
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #f44336;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .progress-container {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        
+        .progress {
+            height: 10px;
+            border-radius: 5px;
+        }
+        
+        .quiz-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+        }
+        
+        .topic-badge {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        
+        .topic-list {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .topic-item {
+            padding: 1rem;
+            border-left: 4px solid #667eea;
+            margin-bottom: 1rem;
+            background: #f8f9fa;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 auto 2rem;
+        }
+        
+        .score-excellent { background: linear-gradient(135deg, #4caf50, #8bc34a); color: white; }
+        .score-good { background: linear-gradient(135deg, #2196f3, #03a9f4); color: white; }
+        .score-average { background: linear-gradient(135deg, #ff9800, #ffc107); color: white; }
+        .score-poor { background: linear-gradient(135deg, #f44336, #e57373); color: white; }
+        
+        .btn-next, .btn-submit {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-next:hover, .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+            color: white;
+        }
+        
+        .code-snippet { background: linear-gradient(135deg,#1e293b 0%,#334155 100%); color:#f1f5f9; padding:1.25rem; border-radius:12px; font-family:'SF Mono','Monaco','Inconsolata','Roboto Mono','Consolas','Courier New',monospace; position:relative; margin:1rem 0; overflow:auto; border:1px solid rgba(255,255,255,0.04); line-height:1.6; }
+        .code-snippet::before { content: "JS"; position:absolute; top:0.6rem; right:0.6rem; font-size:0.75rem; background:linear-gradient(135deg,#06b6d4,#0284c7); color:white; padding:0.25rem 0.6rem; border-radius:6px; font-weight:600; }
+
+        
+        .explanation {
+            background: #f0f9ff;
+            border-left: 4px solid #0ea5e9;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0 8px 8px 0;
+            display: none;
+        }
+        
+        .timer {
+            background: linear-gradient(135deg, #ff6b6b, #ffa726);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .start-screen {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .results-screen {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            display: none;
+        }
+        
+        .difficulty-badge {
+            background: linear-gradient(135deg, #ff6b6b, #ffa726);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .review-item {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid;
+        }
+
+        .review-item.correct {
+            border-left-color: #28a745;
+            background: linear-gradient(135deg, #f8fff9 0%, #e8f5e8 100%);
+        }
+
+        .review-item.incorrect {
+            border-left-color: #dc3545;
+            background: linear-gradient(135deg, #fff8f8 0%, #ffebee 100%);
+        }
+
+        .review-question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .review-option {
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+
+        .review-option.user-selected {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            font-weight: 500;
+        }
+
+        .review-option.correct-answer {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            font-weight: 500;
+        }
+
+        .review-option.user-incorrect {
+            background: #ffebee;
+            border: 2px solid #f44336;
+        }
+
+        .review-explanation {
+            background: #f0f9ff;
+            border-left: 4px solid #0ea5e9;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+        }
+
+        .review-stats {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .review-stats .row > div {
+            border-right: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .review-stats .row > div:last-child {
+            border-right: none;
+        }
+    </style>
+<div class="body">
+    <div class="container-fluid py-4">
+        <div class="quiz-container">
+            <!-- Start Screen -->
+            <div id="startScreen" class="start-screen">
+                <div class="quiz-header">
+                    <h1 class="display-4 text-primary"><i class="fas fa-code"></i> JavaScript Advanced Quiz - Part 2</h1>
+                    <div class="difficulty-badge">
+                        <i class="fas fa-star"></i> Advanced Level
+                    </div>
+                    <p class="lead text-muted">Master advanced JavaScript concepts and modern features</p>
+                </div>
+                
+                <div class="topic-list">
+                    <h4 class="text-primary mb-3">Advanced Topics Covered:</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="topic-item">
+                                <i class="fas fa-layer-group text-warning"></i>
+                                <strong>Functions Advanced</strong> - Arrow functions, closures, callbacks
+                            </div>
+                            <div class="topic-item">
+                                <i class="fas fa-list text-info"></i>
+                                <strong>Arrays & HOF</strong> - map, filter, reduce, forEach
+                            </div>
+                            <div class="topic-item">
+                                <i class="fas fa-object-group text-success"></i>
+                                <strong>Classes & OOP</strong> - ES6 classes, inheritance, methods
+                            </div>
+                            <div class="topic-item">
+                                <i class="fas fa-search text-primary"></i>
+                                <strong>Regular Expressions</strong> - Pattern matching, validation
+                            </div>
+                            <div class="topic-item">
+                                <i class="fas fa-file-code text-secondary"></i>
+                                <strong>JSON Handling</strong> - Parse, stringify, manipulation
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="topic-item">
+                                <i class="fas fa-sitemap text-danger"></i>
+                                <strong>DOM Manipulation</strong> - Element selection, events, modification
+                            </div>
+                            <div class="topic-item">
+                                <i class="fas fa-database text-info"></i>
+                                <strong>Data Types Advanced</strong> - Type coercion, checking, conversion
+                            </div>
+                            <div class="topic-item">
+                                <i class="fas fa-sync text-warning"></i>
+                                <strong>Loops Advanced</strong> - for...in, for...of, performance
+                            </div>
+                            <div class="topic-item">
+                                <i class="fas fa-question-circle text-success"></i>
+                                <strong>Conditionals Advanced</strong> - Complex logic, short-circuit
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Quiz Info:</strong> 25 questions • Multiple choice • Code examples • Detailed explanations • Timer included
+                </div>
+                
+                <button class="btn btn-next btn-lg" onclick="startQuiz()">
+                    <i class="fas fa-rocket"></i> Start Advanced Quiz
+                </button>
+            </div>
+
+            <!-- Progress Bar -->
+            <div id="progressContainer" class="progress-container" style="display: none;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span>Question <span id="currentQuestion">1</span> of <span id="totalQuestions">25</span></span>
+                    <div class="timer">
+                        <i class="fas fa-clock"></i> <span id="timer">00:00</span>
+                    </div>
+                    <span>Score: <span id="currentScore">0</span></span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar bg-gradient" role="progressbar" style="width: 4%"></div>
+                </div>
+            </div>
+
+            <!-- Quiz Questions -->
+            <div id="quizContainer" style="display: none;"></div>
+
+            <!-- Results Screen -->
+            <div id="resultsScreen" class="results-screen">
+                <h2 class="text-primary mb-4"><i class="fas fa-trophy"></i> Quiz Complete!</h2>
+                <div id="scoreCircle" class="score-circle"></div>
+                <div id="resultMessage"></div>
+                <div class="mt-4">
+                    <button class="btn btn-next" onclick="restartQuiz()">
+                        <i class="fas fa-redo"></i> Take Quiz Again
+                    </button>
+                    <button class="btn btn-outline-primary ms-2" onclick="reviewAnswers()">
+                        <i class="fas fa-eye"></i> Review Answers
+                    </button>
+                </div>
+            </div>
+
+            <!-- Review Screen -->
+            <div id="reviewScreen" class="results-screen" style="display: none;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="text-primary mb-0"><i class="fas fa-clipboard-check"></i> Answer Review</h2>
+                    <button class="btn btn-outline-secondary" onclick="closeReview()">
+                        <i class="fas fa-times"></i> Close Review
+                    </button>
+                </div>
+                <div id="reviewContent" class="text-start"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizQuestions = [
+            // Loops Advanced
+            {
+                topic: "Loops in JavaScript",
+                question: "What's the difference between for...in and for...of loops?",
+                code: `const arr = ['a', 'b', 'c'];
+for (let item in arr) console.log(item);     // ?
+for (let item of arr) console.log(item);     // ?`,
+                options: [
+                    "Both iterate over values", 
+                    "for...in iterates over indices, for...of iterates over values", 
+                    "Both iterate over indices", 
+                    "for...in iterates over values, for...of iterates over indices"
+                ],
+                correct: 1,
+                explanation: "for...in iterates over enumerable property names (indices in arrays), while for...of iterates over iterable values."
+            },
+            {
+                topic: "Loops in JavaScript",
+                question: "Which loop is most efficient for iterating over large arrays?",
+                options: [
+                    "for...in loop", 
+                    "forEach() method", 
+                    "Traditional for loop", 
+                    "for...of loop"
+                ],
+                correct: 2,
+                explanation: "Traditional for loops are generally the fastest for large arrays because they have less overhead than method calls or iterator protocols."
+            },
+
+            // Arrays Advanced
+            {
+                topic: "Arrays in JavaScript",
+                question: "What does the following array method chain return?",
+                code: `const numbers = [1, 2, 3, 4, 5];
+const result = numbers
+  .filter(n => n % 2 === 0)
+  .map(n => n * 2)
+  .reduce((sum, n) => sum + n, 0);`,
+                options: ["12", "30", "6", "15"],
+                correct: 0,
+                explanation: "Filter gets [2, 4], map transforms to [4, 8], reduce sums to 12."
+            },
+            {
+                topic: "Arrays in JavaScript", 
+                question: "Which method modifies the original array?",
+                options: [
+                    "map()", 
+                    "filter()", 
+                    "push()", 
+                    "slice()"
+                ],
+                correct: 2,
+                explanation: "push() adds elements to the end of an array and modifies the original array. Map, filter, and slice return new arrays."
+            },
+
+            // Conditionals Advanced
+            {
+                topic: "Conditionals in JavaScript",
+                question: "What is the result of this expression?",
+                code: `const result = null || undefined || 0 || 'default' || 'backup';
+console.log(result);`,
+                options: ["null", "undefined", "'default'", "'backup'"],
+                correct: 2,
+                explanation: "The || operator returns the first truthy value. 'default' is the first truthy value in this chain."
+            },
+            {
+                topic: "Conditionals in JavaScript",
+                question: "What does the nullish coalescing operator (??) do?",
+                code: `const value1 = null ?? 'default';
+const value2 = 0 ?? 'default';
+const value3 = '' ?? 'default';`,
+                options: [
+                    "All return 'default'", 
+                    "value1='default', value2=0, value3=''", 
+                    "All return the first value", 
+                    "Similar to || operator"
+                ],
+                correct: 1,
+                explanation: "?? only returns the right side if the left side is null or undefined, unlike || which checks for any falsy value."
+            },
+
+            // Functions Advanced - 1
+            {
+                topic: "Functions in JavaScript - 1",
+                question: "What is a closure in JavaScript?",
+                code: `function outer() {
+    let count = 0;
+    return function inner() {
+        return ++count;
+    };
+}
+const counter = outer();`,
+                options: [
+                    "A function inside another function", 
+                    "A function that has access to outer function's variables", 
+                    "A function that returns another function", 
+                    "A self-executing function"
+                ],
+                correct: 1,
+                explanation: "A closure is when an inner function has access to variables from its outer (enclosing) scope even after the outer function has finished executing."
+            },
+            {
+                topic: "Functions in JavaScript - 1",
+                question: "What's the difference between function declarations and expressions?",
+                code: `console.log(declared()); // ?
+console.log(expressed()); // ?
+
+function declared() { return 'declared'; }
+const expressed = function() { return 'expressed'; };`,
+                options: [
+                    "Both work fine", 
+                    "First works, second throws error", 
+                    "Both throw errors", 
+                    "First throws error, second works"
+                ],
+                correct: 1,
+                explanation: "Function declarations are hoisted and can be called before they're defined. Function expressions are not hoisted."
+            },
+
+            // Functions Advanced - 2
+            {
+                topic: "Functions in JavaScript - 2",
+                question: "What's the key difference between arrow functions and regular functions?",
+                code: `const obj = {
+    name: 'Test',
+    regular: function() { return this.name; },
+    arrow: () => { return this.name; }
+};`,
+                options: [
+                    "Arrow functions are shorter", 
+                    "Arrow functions don't have their own 'this'", 
+                    "Regular functions are faster", 
+                    "No difference in behavior"
+                ],
+                correct: 1,
+                explanation: "Arrow functions don't bind their own 'this' - they inherit 'this' from the enclosing scope."
+            },
+            {
+                topic: "Functions in JavaScript - 2",
+                question: "What does this higher-order function do?",
+                code: `function createMultiplier(factor) {
+    return function(number) {
+        return number * factor;
+    };
+}
+const double = createMultiplier(2);`,
+                options: [
+                    "Creates a function that doubles numbers", 
+                    "Creates a function that multiplies by any factor", 
+                    "Creates a function that adds numbers", 
+                    "Creates a recursive function"
+                ],
+                correct: 1,
+                explanation: "This is a function factory that creates multiplier functions. createMultiplier(2) creates a function that multiplies by 2, but the pattern works for any factor."
+            },
+
+            // Higher Order Functions
+            {
+                topic: "Higher Order Functions in JavaScript",
+                question: "What will this reduce function return?",
+                code: `const words = ['hello', 'world', 'javascript'];
+const result = words.reduce((acc, word) => {
+    acc[word.length] = (acc[word.length] || 0) + 1;
+    return acc;
+}, {});`,
+                options: [
+                    "{5: 2, 10: 1}", 
+                    "{hello: 1, world: 1, javascript: 1}", 
+                    "{5: 1, 5: 1, 10: 1}", 
+                    "An error"
+                ],
+                correct: 0,
+                explanation: "This groups words by their length and counts occurrences. 'hello' and 'world' both have 5 letters, 'javascript' has 10."
+            },
+            {
+                topic: "Higher Order Functions in JavaScript",
+                question: "Which method should you use to transform every element in an array?",
+                options: [
+                    "forEach()", 
+                    "filter()", 
+                    "map()", 
+                    "reduce()"
+                ],
+                correct: 2,
+                explanation: "map() creates a new array with the results of calling a function for every element, making it ideal for transformation."
+            },
+
+            // Data Types Revisited
+            {
+                topic: "Data Types (Revisited) in JavaScript",
+                question: "What type coercion occurs here?",
+                code: `console.log(1 + '1');     // ?
+console.log(1 - '1');     // ?
+console.log(1 * '2');     // ?
+console.log('5' / 2);     // ?`,
+                options: [
+                    "All return strings", 
+                    "'11', 0, 2, 2.5", 
+                    "All return numbers", 
+                    "Errors occur"
+                ],
+                correct: 1,
+                explanation: "+ with strings does concatenation, but -, *, / convert strings to numbers for arithmetic operations."
+            },
+            {
+                topic: "Data Types (Revisited) in JavaScript",
+                question: "How can you check if a value is truly an array?",
+                options: [
+                    "typeof value === 'array'", 
+                    "value instanceof Array", 
+                    "Array.isArray(value)", 
+                    "Both B and C"
+                ],
+                correct: 3,
+                explanation: "Both Array.isArray() and instanceof Array work, but Array.isArray() is more reliable across different contexts."
+            },
+
+            // Working with JSON
+            {
+                topic: "Working with JSON in JavaScript",
+                question: "What happens when you JSON.stringify() a function?",
+                code: `const obj = {
+    name: 'test',
+    method: function() { return 'hello'; },
+    arrow: () => 'world'
+};
+console.log(JSON.stringify(obj));`,
+                options: [
+                    "Functions are converted to strings", 
+                    "Functions are ignored/omitted", 
+                    "An error is thrown", 
+                    "Functions become null"
+                ],
+                correct: 1,
+                explanation: "JSON.stringify() ignores functions, undefined values, and symbols. Only serializable data is included."
+            },
+            {
+                topic: "Working with JSON in JavaScript",
+                question: "How do you safely parse JSON that might be invalid?",
+                options: [
+                    "JSON.parse() with if statement", 
+                    "Use try-catch with JSON.parse()", 
+                    "Check with typeof first", 
+                    "Use JSON.safeParse()"
+                ],
+                correct: 1,
+                explanation: "JSON.parse() throws an error for invalid JSON, so wrapping it in try-catch is the safe approach."
+            },
+
+            // Array Higher Order Functions
+            {
+                topic: "Array Higher Order Functions in JavaScript",
+                question: "What's the difference between find() and filter()?",
+                code: `const users = [
+    {id: 1, active: true},
+    {id: 2, active: true}, 
+    {id: 3, active: false}
+];
+const result1 = users.find(u => u.active);
+const result2 = users.filter(u => u.active);`,
+                options: [
+                    "find() returns an array, filter() returns an object", 
+                    "find() returns first match, filter() returns all matches", 
+                    "No difference", 
+                    "find() is faster than filter()"
+                ],
+                correct: 1,
+                explanation: "find() returns the first element that matches the condition, filter() returns an array of all matching elements."
+            },
+            {
+                topic: "Array Higher Order Functions in JavaScript",
+                question: "What will this code output?",
+                code: `const numbers = [1, 2, 3, 4, 5];
+const result = numbers
+    .map(n => n * 2)
+    .filter(n => n > 5)
+    .length;`,
+                options: ["2", "3", "4", "5"],
+                correct: 1,
+                explanation: "map creates [2,4,6,8,10], filter keeps [6,8,10] (length = 3), then .length returns 3."
+            },
+
+            // Regular Expressions
+            {
+                topic: "Regular Expressions in JavaScript",
+                question: "What does this regex match?",
+                code: `const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/;
+const email = 'test@example.com';
+console.log(regex.test(email));`,
+                options: [
+                    "Phone numbers", 
+                    "Email addresses", 
+                    "URLs", 
+                    "IP addresses"
+                ],
+                correct: 1,
+                explanation: "This is a basic email validation regex that checks for the standard email format with @ symbol and domain."
+            },
+            {
+                topic: "Regular Expressions in JavaScript",
+                question: "What's the difference between /g and /i flags?",
+                options: [
+                    "/g is global, /i is case-insensitive", 
+                    "/g is case-insensitive, /i is global", 
+                    "Both do the same thing", 
+                    "/g is grouping, /i is ignore"
+                ],
+                correct: 0,
+                explanation: "The /g flag makes the regex match all occurrences (global), while /i makes it case-insensitive."
+            },
+
+            // Classes in JavaScript
+            {
+                topic: "Classes in JavaScript in JavaScript",
+                question: "What's the correct way to create class inheritance?",
+                code: `class Animal {
+    constructor(name) { this.name = name; }
+}
+class Dog _____ Animal {
+    constructor(name, breed) {
+        _____;
+        this.breed = breed;
+    }
+}`,
+                options: [
+                    "inherits, super(name)", 
+                    "extends, super(name)", 
+                    "implements, parent(name)", 
+                    "from, base(name)"
+                ],
+                correct: 1,
+                explanation: "Use 'extends' for inheritance and 'super()' to call the parent constructor."
+            },
+            {
+                topic: "Classes in JavaScript in JavaScript",
+                question: "What are static methods in classes?",
+                code: `class MathUtils {
+    static add(a, b) {
+        return a + b;
+    }
+}
+// How to call?`,
+                options: [
+                    "new MathUtils().add(1, 2)", 
+                    "MathUtils.add(1, 2)", 
+                    "MathUtils().add(1, 2)", 
+                    "Cannot be called"
+                ],
+                correct: 1,
+                explanation: "Static methods belong to the class itself, not instances, so they're called directly on the class."
+            },
+
+            // DOM Manipulation - 1
+            {
+                topic: "DOM Manipulation in JavaScript - 1",
+                question: "What's the difference between innerHTML and textContent?",
+                code: `const div = document.createElement('div');
+div.innerHTML = '<span>Hello</span>';
+div.textContent = '<span>Hello</span>';`,
+                options: [
+                    "innerHTML renders HTML, textContent treats it as plain text", 
+                    "No difference", 
+                    "textContent is faster", 
+                    "innerHTML is safer"
+                ],
+                correct: 0,
+                explanation: "innerHTML parses and renders HTML tags, while textContent treats everything as plain text, making it safer against XSS."
+            },
+            {
+                topic: "DOM Manipulation in JavaScript - 1",
+                question: "Which method is best for selecting multiple elements?",
+                options: [
+                    "getElementById()", 
+                    "querySelector()", 
+                    "querySelectorAll()", 
+                    "getElementsByClassName()"
+                ],
+                correct: 2,
+                explanation: "querySelectorAll() returns a NodeList of all matching elements and accepts any CSS selector."
+            },
+
+            // DOM Manipulation - 2
+            {
+                topic: "DOM Manipulation in JavaScript - 2",
+                question: "What's event delegation?",
+                code: `document.getElementById('parent').addEventListener('click', (e) => {
+    if (e.target.classList.contains('child')) {
+        // Handle child click
+    }
+});`,
+                options: [
+                    "Adding events to child elements", 
+                    "Using parent element to handle child events", 
+                    "Removing events from elements", 
+                    "Copying events between elements"
+                ],
+                correct: 1,
+                explanation: "Event delegation uses event bubbling to handle events on child elements by listening on a parent element."
+            },
+            {
+                topic: "DOM Manipulation in JavaScript - 2",
+                question: "How do you prevent event bubbling?",
+                options: [
+                    "event.preventDefault()", 
+                    "event.stopPropagation()", 
+                    "event.stopDefault()", 
+                    "event.bubble = false"
+                ],
+                correct: 1,
+                explanation: "stopPropagation() prevents the event from bubbling up to parent elements. preventDefault() stops the default action."
+            },
+
+            // Bonus Advanced Questions
+            {
+                topic: "Advanced JavaScript Concepts",
+                question: "What is the temporal dead zone?",
+                code: `console.log(x); // ?
+let x = 5;`,
+                options: [
+                    "undefined is printed", 
+                    "ReferenceError is thrown", 
+                    "5 is printed", 
+                    "null is printed"
+                ],
+                correct: 1,
+                explanation: "The temporal dead zone is the period between entering scope and declaration where let/const variables cannot be accessed."
+            },
+            {
+                topic: "Advanced JavaScript Concepts",
+                question: "What does Object.freeze() do?",
+                code: `const obj = Object.freeze({a: 1});
+obj.a = 2;
+obj.b = 3;
+console.log(obj);`,
+                options: [
+                    "{a: 2, b: 3}", 
+                    "{a: 1}", 
+                    "Error is thrown", 
+                    "{a: 2}"
+                ],
+                correct: 1,
+                explanation: "Object.freeze() makes an object immutable. Properties cannot be added, deleted, or modified."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedAnswer = null;
+        let timer = 0;
+        let timerInterval;
+        let userAnswers = [];
+
+        function startQuiz() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('progressContainer').style.display = 'block';
+            document.getElementById('quizContainer').style.display = 'block';
+            
+            // Start timer
+            timerInterval = setInterval(() => {
+                timer++;
+                updateTimer();
+            }, 1000);
+            
+            loadQuestion();
+        }
+
+        function updateTimer() {
+            const minutes = Math.floor(timer / 60);
+            const seconds = timer % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function loadQuestion() {
+            const question = quizQuestions[currentQuestionIndex];
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('totalQuestions').textContent = quizQuestions.length;
+            
+            // Update progress bar
+            const progress = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
+            document.querySelector('.progress-bar').style.width = progress + '%';
+            
+            const quizContainer = document.getElementById('quizContainer');
+            quizContainer.innerHTML = `
+                <div class="question-card active">
+                    <div class="topic-badge">
+                        <i class="fas fa-tag"></i> ${question.topic}
+                    </div>
+                    <h4 class="mb-4">${question.question}</h4>
+                    ${question.code ? `<div class="code-snippet"><pre><code>${question.code}</code></pre></div>` : ''}
+                    <div class="options">
+                        ${question.options.map((option, index) => `
+                            <div class="option" onclick="selectOption(${index})">
+                                ${String.fromCharCode(65 + index)}. ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="explanation" id="explanation">
+                        <strong><i class="fas fa-lightbulb"></i> Explanation:</strong><br>
+                        ${question.explanation}
+                    </div>
+                    <div class="mt-4 text-center">
+                        <button class="btn btn-next" onclick="nextQuestion()" id="nextBtn" style="display: none;">
+                            ${currentQuestionIndex === quizQuestions.length - 1 ? 'Finish Quiz' : 'Next Question'}
+                            <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            selectedAnswer = null;
+        }
+
+        function selectOption(optionIndex) {
+            if (selectedAnswer !== null) return; // Prevent multiple selections
+            
+            selectedAnswer = optionIndex;
+            const question = quizQuestions[currentQuestionIndex];
+            const options = document.querySelectorAll('.option');
+            
+            // Store user's answer
+            userAnswers[currentQuestionIndex] = {
+                selected: optionIndex,
+                correct: question.correct,
+                isCorrect: optionIndex === question.correct
+            };
+            
+            // Show results for all options
+            options.forEach((option, index) => {
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === optionIndex) {
+                    option.classList.add('incorrect');
+                }
+                option.style.cursor = 'default';
+            });
+            
+            // Update score
+            if (optionIndex === question.correct) {
+                score++;
+                document.getElementById('currentScore').textContent = score;
+            }
+            
+            // Show explanation and next button
+            document.getElementById('explanation').style.display = 'block';
+            document.getElementById('nextBtn').style.display = 'inline-block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex >= quizQuestions.length) {
+                showResults();
+            } else {
+                loadQuestion();
+            }
+        }
+
+        function showResults() {
+            clearInterval(timerInterval);
+            
+            document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultsScreen').style.display = 'block';
+            
+            const percentage = Math.round((score / quizQuestions.length) * 100);
+            const scoreCircle = document.getElementById('scoreCircle');
+            const resultMessage = document.getElementById('resultMessage');
+            
+            scoreCircle.textContent = percentage + '%';
+            
+            let message, className;
+            if (percentage >= 90) {
+                message = `<h3 class="text-success">Outstanding! 🏆</h3>
+                          <p>You've mastered advanced JavaScript concepts! You scored ${score}/${quizQuestions.length}.</p>
+                          <p>You're ready for complex JavaScript projects and frameworks.</p>`;
+                className = 'score-excellent';
+            } else if (percentage >= 75) {
+                message = `<h3 class="text-primary">Great Job! 🎉</h3>
+                          <p>Excellent understanding of JavaScript! You scored ${score}/${quizQuestions.length}.</p>
+                          <p>Keep practicing the topics you missed to become an expert.</p>`;
+                className = 'score-good';
+            } else if (percentage >= 60) {
+                message = `<h3 class="text-warning">Good Effort! 📚</h3>
+                          <p>Solid foundation in JavaScript! You scored ${score}/${quizQuestions.length}.</p>
+                          <p>Review the advanced concepts and try the quiz again.</p>`;
+                className = 'score-average';
+            } else {
+                message = `<h3 class="text-danger">Keep Learning! 💪</h3>
+                          <p>You scored ${score}/${quizQuestions.length}. Don't give up!</p>
+                          <p>Review the JavaScript guides and practice more before retaking.</p>`;
+                className = 'score-poor';
+            }
+            
+            scoreCircle.className = `score-circle ${className}`;
+            resultMessage.innerHTML = message;
+            
+            // Add time taken
+            const minutes = Math.floor(timer / 60);
+            const seconds = timer % 60;
+            resultMessage.innerHTML += `<p class="mt-3"><strong>Time taken:</strong> ${minutes}m ${seconds}s</p>`;
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            selectedAnswer = null;
+            timer = 0;
+            userAnswers = [];
+            
+            document.getElementById('currentScore').textContent = '0';
+            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('startScreen').style.display = 'block';
+            
+            clearInterval(timerInterval);
+        }
+
+        function reviewAnswers() {
+            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('reviewScreen').style.display = 'block';
+            
+            const reviewContent = document.getElementById('reviewContent');
+            const correctAnswers = userAnswers.filter(answer => answer.isCorrect).length;
+            const incorrectAnswers = userAnswers.length - correctAnswers;
+            
+            let reviewHTML = `
+                <div class="review-stats">
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <h4 class="mb-1">${userAnswers.length}</h4>
+                            <small>Total Questions</small>
+                        </div>
+                        <div class="col-md-3">
+                            <h4 class="mb-1 text-success">${correctAnswers}</h4>
+                            <small>Correct</small>
+                        </div>
+                        <div class="col-md-3">
+                            <h4 class="mb-1 text-danger">${incorrectAnswers}</h4>
+                            <small>Incorrect</small>
+                        </div>
+                        <div class="col-md-3">
+                            <h4 class="mb-1">${Math.round((correctAnswers/userAnswers.length)*100)}%</h4>
+                            <small>Score</small>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            userAnswers.forEach((userAnswer, index) => {
+                const question = quizQuestions[index];
+                const isCorrect = userAnswer.isCorrect;
+                
+                reviewHTML += `
+                    <div class="review-item ${isCorrect ? 'correct' : 'incorrect'}">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div class="topic-badge">
+                                <i class="fas fa-tag"></i> ${question.topic}
+                            </div>
+                            <div class="badge ${isCorrect ? 'bg-success' : 'bg-danger'}">
+                                ${isCorrect ? 'Correct' : 'Incorrect'}
+                                <i class="fas fa-${isCorrect ? 'check' : 'times'} ms-1"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="review-question">
+                            Question ${index + 1}: ${question.question}
+                        </div>
+                        
+                        ${question.code ? `<div class="code-snippet">${question.code}</div>` : ''}
+                        
+                        <div class="options-review">
+                            ${question.options.map((option, optionIndex) => {
+                                let optionClass = 'review-option';
+                                let optionIcon = '';
+                                
+                                if (optionIndex === question.correct) {
+                                    optionClass += ' correct-answer';
+                                    optionIcon = '<i class="fas fa-check text-success float-end"></i>';
+                                }
+                                
+                                if (optionIndex === userAnswer.selected) {
+                                    if (optionIndex === question.correct) {
+                                        optionClass += ' user-selected';
+                                        optionIcon = '<i class="fas fa-check-circle text-success float-end"></i>';
+                                    } else {
+                                        optionClass += ' user-incorrect';
+                                        optionIcon = '<i class="fas fa-times-circle text-danger float-end"></i>';
+                                    }
+                                }
+                                
+                                return `
+                                    <div class="${optionClass}">
+                                        ${String.fromCharCode(65 + optionIndex)}. ${option}
+                                        ${optionIcon}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        
+                        <div class="review-explanation">
+                            <strong><i class="fas fa-lightbulb text-primary"></i> Explanation:</strong><br>
+                            ${question.explanation}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            reviewContent.innerHTML = reviewHTML;
+        }
+
+        function closeReview() {
+            document.getElementById('reviewScreen').style.display = 'none';
+            document.getElementById('resultsScreen').style.display = 'block';
+        }
+    </script>
+</div>
+</html>

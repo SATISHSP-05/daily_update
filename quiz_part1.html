@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Fundamentals Quiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            min-height: 100vh; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .card { 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15); 
+            border: none; 
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        .card:hover { transform: translateY(-3px); }
+        .bg-gradient { background: linear-gradient(135deg, #667eea, #764ba2) !important; }
+        
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: none;
+            animation: slideIn 0.5s ease-in-out;
+        }
+        
+        .question-card.active {
+            display: block;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .option:hover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+            transform: translateX(5px);
+        }
+        
+        .option.selected {
+            background: #e3f2fd;
+            border-color: #2196f3;
+            color: #1976d2;
+            font-weight: 500;
+        }
+        
+        .option.correct {
+            background: #e8f5e8;
+            border-color: #4caf50;
+            color: #2e7d32;
+        }
+        
+        .option.incorrect {
+            background: #ffebee;
+            border-color: #f44336;
+            color: #c62828;
+        }
+        
+        .option.correct::after {
+            content: "✓";
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4caf50;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .option.incorrect::after {
+            content: "✗";
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #f44336;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .progress-container {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        
+        .progress {
+            height: 10px;
+            border-radius: 5px;
+        }
+        
+        .quiz-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+        }
+        
+        .topic-badge {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 auto 2rem;
+        }
+        
+        .score-excellent { background: linear-gradient(135deg, #4caf50, #8bc34a); color: white; }
+        .score-good { background: linear-gradient(135deg, #2196f3, #03a9f4); color: white; }
+        .score-average { background: linear-gradient(135deg, #ff9800, #ffc107); color: white; }
+        .score-poor { background: linear-gradient(135deg, #f44336, #e57373); color: white; }
+        
+        .btn-next, .btn-submit {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-next:hover, .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+            color: white;
+        }
+        
+        .code-snippet {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: #f1f5f9;
+            padding: 1.5rem;
+            border-radius: 12px;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Consolas', 'Courier New', monospace;
+            margin: 1.5rem 0;
+            font-size: 0.9em;
+            overflow-x: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            line-height: 1.6;
+            position: relative;
+        }
+        .code-snippet::before {
+            content: "JavaScript";
+            position: absolute;
+            top: 0.75rem;
+            left: 0.75rem;
+            font-size: 0.75rem;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+        }
+        
+        .explanation {
+            background: #f0f9ff;
+            border-left: 4px solid #0ea5e9;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0 8px 8px 0;
+            display: none;
+        }
+        
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .start-screen, .results-screen {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .topic-list {
+            text-align: left;
+            margin: 2rem 0;
+        }
+        
+        .topic-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gradient">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-brain"></i> IT Defined JavaScript Quiz</a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text text-white">
+                    <i class="fas fa-clock"></i> <span id="timer">00:00</span>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="quiz-container">
+            <!-- Start Screen -->
+            <div id="startScreen" class="start-screen">
+                <div class="quiz-header">
+                    <h1 class="display-4 text-primary"><i class="fas fa-brain"></i> JavaScript Fundamentals Quiz</h1>
+                    <p class="lead text-muted">Test your knowledge on core JavaScript concepts</p>
+                </div>
+                
+                <div class="topic-list">
+                    <h4 class="text-primary mb-3">Quiz Topics:</h4>
+                    <div class="topic-item">
+                        <i class="fas fa-lightbulb text-warning"></i>
+                        <strong>Introduction to JavaScript</strong> - Basic concepts and syntax
+                    </div>
+                    <div class="topic-item">
+                        <i class="fas fa-database text-info"></i>
+                        <strong>Primitive Data Types</strong> - Numbers, strings, booleans, etc.
+                    </div>
+                    <div class="topic-item">
+                        <i class="fas fa-calculator text-success"></i>
+                        <strong>Operators</strong> - Arithmetic, comparison, logical operators
+                    </div>
+                    <div class="topic-item">
+                        <i class="fas fa-code-branch text-primary"></i>
+                        <strong>Conditionals</strong> - If statements, switch, ternary operator
+                    </div>
+                </div>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Quiz Info:</strong> 20 questions • Multiple choice • Immediate feedback • Timer included
+                </div>
+                
+                <button class="btn btn-next btn-lg" onclick="startQuiz()">
+                    <i class="fas fa-play"></i> Start Quiz
+                </button>
+            </div>
+
+            <!-- Progress Bar -->
+            <div id="progressContainer" class="progress-container" style="display: none;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span>Question <span id="currentQuestion">1</span> of <span id="totalQuestions">20</span></span>
+                    <span>Score: <span id="currentScore">0</span></span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar bg-gradient" role="progressbar" style="width: 5%"></div>
+                </div>
+            </div>
+
+            <!-- Quiz Questions -->
+            <div id="quizContainer" style="display: none;"></div>
+
+            <!-- Results Screen -->
+            <div id="resultsScreen" class="results-screen" style="display: none;">
+                <h2 class="text-primary mb-4"><i class="fas fa-trophy"></i> Quiz Complete!</h2>
+                <div id="scoreDisplay" class="score-circle score-excellent">0%</div>
+                <h3 id="scoreMessage">Excellent work!</h3>
+                <p id="scoreDetails" class="text-muted mb-4">You got 0 out of 20 questions correct.</p>
+                
+                <div class="row g-3 mb-4">
+                    <div class="col-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                                <h5 id="correctCount">0</h5>
+                                <small>Correct</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <i class="fas fa-times-circle fa-2x text-danger mb-2"></i>
+                                <h5 id="incorrectCount">0</h5>
+                                <small>Incorrect</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button class="btn btn-next" onclick="restartQuiz()">
+                        <i class="fas fa-redo"></i> Retake Quiz
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const quizData = [
+            // Introduction to JavaScript
+            {
+                topic: "Introduction to JavaScript",
+                question: "What does JavaScript primarily run on?",
+                options: ["Only web browsers", "Web browsers and servers", "Only mobile devices", "Only desktop applications"],
+                correct: 1,
+                explanation: "JavaScript can run in web browsers (client-side) and on servers using Node.js (server-side)."
+            },
+            {
+                topic: "Introduction to JavaScript",
+                question: "Which of the following is the correct way to declare a variable in JavaScript?",
+                options: ["variable x = 5;", "var x = 5;", "declare x = 5;", "x := 5;"],
+                correct: 1,
+                explanation: "The 'var' keyword is one of the correct ways to declare variables in JavaScript. 'let' and 'const' are also valid."
+            },
+            {
+                topic: "Introduction to JavaScript",
+                question: "JavaScript is a _______ language.",
+                options: ["Compiled", "Interpreted", "Assembly", "Machine"],
+                correct: 1,
+                explanation: "JavaScript is an interpreted language, meaning it's executed line by line at runtime rather than being compiled beforehand."
+            },
+            {
+                topic: "Introduction to JavaScript",
+                question: "What is the correct way to write a JavaScript comment?",
+                options: ["<!-- This is a comment -->", "/* This is a comment */", "# This is a comment", "Both A and B"],
+                correct: 1,
+                explanation: "JavaScript supports /* */ for multi-line comments and // for single-line comments. HTML comments (<!-- -->) don't work in JavaScript."
+            },
+            {
+                topic: "Introduction to JavaScript",
+                question: "Which statement is true about JavaScript?",
+                options: ["JavaScript and Java are the same", "JavaScript is case-sensitive", "JavaScript doesn't support functions", "JavaScript can't manipulate HTML"],
+                correct: 1,
+                explanation: "JavaScript is case-sensitive, meaning 'myVariable' and 'myvariable' are treated as different identifiers."
+            },
+
+            // Primitive Data Types
+            {
+                topic: "Primitive Data Types",
+                question: "Which of the following is NOT a primitive data type in JavaScript?",
+                options: ["string", "number", "boolean", "array"],
+                correct: 3,
+                explanation: "Arrays are objects in JavaScript, not primitive data types. Primitive types include string, number, boolean, undefined, null, symbol, and bigint."
+            },
+            {
+                topic: "Primitive Data Types",
+                question: "What is the result of: typeof 'Hello World'",
+                options: ["'text'", "'string'", "'char'", "'object'"],
+                correct: 1,
+                explanation: "The typeof operator returns 'string' for string values in JavaScript."
+            },
+            {
+                topic: "Primitive Data Types",
+                question: "What does 'undefined' represent in JavaScript?",
+                options: ["A variable that has been declared but not assigned", "A null value", "An error", "An empty string"],
+                correct: 0,
+                explanation: "'undefined' is the value of a variable that has been declared but not yet assigned a value."
+            },
+            {
+                topic: "Primitive Data Types",
+                question: "Which is true about the number data type?",
+                options: ["Can only store integers", "Can store both integers and decimals", "Cannot store negative numbers", "Is always a string"],
+                correct: 1,
+                explanation: "JavaScript's number type can store both integers (like 42) and floating-point numbers (like 3.14)."
+            },
+            {
+                topic: "Primitive Data Types",
+                question: "What is the result of: typeof null",
+                options: ["'null'", "'undefined'", "'object'", "'boolean'"],
+                correct: 2,
+                explanation: "This is a known quirk in JavaScript. typeof null returns 'object', even though null is a primitive type."
+            },
+
+            // Operators
+            {
+                topic: "Operators",
+                question: "What is the result of: 5 + '3'",
+                options: ["8", "'53'", "Error", "undefined"],
+                correct: 1,
+                explanation: "When using + with a string, JavaScript performs string concatenation, so 5 + '3' becomes '53'."
+            },
+            {
+                topic: "Operators",
+                question: "What does the === operator do?",
+                options: ["Assignment", "Loose equality", "Strict equality", "Not equal"],
+                correct: 2,
+                explanation: "The === operator checks for strict equality, comparing both value and type without type conversion."
+            },
+            {
+                topic: "Operators",
+                question: "What is the result of: 10 % 3",
+                options: ["3", "3.33", "1", "0"],
+                correct: 2,
+                explanation: "The % operator (modulus) returns the remainder of division. 10 ÷ 3 = 3 remainder 1."
+            },
+            {
+                topic: "Operators",
+                question: "What does the ++ operator do?",
+                options: ["Adds two numbers", "Increments by 1", "Concatenates strings", "Compares values"],
+                correct: 1,
+                explanation: "The ++ operator increments a variable by 1. It can be used as prefix (++x) or postfix (x++)."
+            },
+            {
+                topic: "Operators",
+                question: "What is the result of: true && false",
+                options: ["true", "false", "undefined", "Error"],
+                correct: 1,
+                explanation: "The && (logical AND) operator returns true only if both operands are true. Since one is false, the result is false."
+            },
+
+            // Conditionals
+            {
+                topic: "Conditionals",
+                question: "Which is the correct syntax for an if statement?",
+                options: ["if x = 5 {}", "if (x == 5) {}", "if [x == 5] {}", "if x == 5 then {}"],
+                correct: 1,
+                explanation: "The correct syntax uses parentheses around the condition: if (condition) { code }"
+            },
+            {
+                topic: "Conditionals",
+                question: "What is the ternary operator syntax?",
+                options: ["condition ? true : false", "if condition then true else false", "condition -> true : false", "(condition) true : false"],
+                correct: 0,
+                explanation: "The ternary operator uses the syntax: condition ? valueIfTrue : valueIfFalse"
+            },
+            {
+                topic: "Conditionals",
+                question: "In a switch statement, what happens if you forget the 'break'?",
+                options: ["Syntax error", "Code continues to next case", "Code stops", "Nothing happens"],
+                correct: 1,
+                explanation: "Without 'break', execution falls through to the next case, which is usually not desired behavior."
+            },
+            {
+                topic: "Conditionals",
+                question: "What does 'else if' allow you to do?",
+                options: ["Run multiple conditions simultaneously", "Check additional conditions if previous ones are false", "Create loops", "Define functions"],
+                correct: 1,
+                explanation: "'else if' allows you to check multiple conditions in sequence, executing the first one that evaluates to true."
+            },
+            {
+                topic: "Conditionals",
+                question: "Which values are considered 'falsy' in JavaScript?",
+                options: ["Only false", "false, 0, '', null, undefined", "Only 0 and false", "All negative numbers"],
+                correct: 1,
+                explanation: "JavaScript treats false, 0, '' (empty string), null, undefined, and NaN as falsy values in conditional contexts."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedAnswer = null;
+        let timer = 0;
+        let timerInterval;
+        let userAnswers = [];
+
+        function startQuiz() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('progressContainer').style.display = 'block';
+            document.getElementById('quizContainer').style.display = 'block';
+            
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            
+            startTimer();
+            shuffleArray(quizData);
+            displayQuestion();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function startTimer() {
+            timer = 0;
+            timerInterval = setInterval(() => {
+                timer++;
+                const minutes = Math.floor(timer / 60);
+                const seconds = timer % 60;
+                document.getElementById('timer').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function displayQuestion() {
+            const question = quizData[currentQuestionIndex];
+            const container = document.getElementById('quizContainer');
+            
+            // Update progress
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('totalQuestions').textContent = quizData.length;
+            document.getElementById('currentScore').textContent = score;
+            
+            const progress = ((currentQuestionIndex + 1) / quizData.length) * 100;
+            document.querySelector('.progress-bar').style.width = progress + '%';
+            
+            container.innerHTML = `
+                <div class="question-card active">
+                    <div class="topic-badge">
+                        <i class="fas fa-tag"></i> ${question.topic}
+                    </div>
+                    <h3 class="mb-4">${question.question}</h3>
+                    <div class="options-container">
+                        ${question.options.map((option, index) => `
+                            <div class="option" onclick="selectOption(${index})" data-index="${index}">
+                                <strong>${String.fromCharCode(65 + index)}.</strong> ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="explanation" id="explanation">
+                        <strong><i class="fas fa-lightbulb"></i> Explanation:</strong><br>
+                        ${question.explanation}
+                    </div>
+                    <div class="text-center mt-4">
+                        <button class="btn btn-next" onclick="nextQuestion()" id="nextBtn" disabled>
+                            ${currentQuestionIndex === quizData.length - 1 ? '<i class="fas fa-flag-checkered"></i> Finish Quiz' : '<i class="fas fa-arrow-right"></i> Next Question'}
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            selectedAnswer = null;
+        }
+
+        function selectOption(index) {
+            if (selectedAnswer !== null) return; // Already answered
+            
+            selectedAnswer = index;
+            const question = quizData[currentQuestionIndex];
+            const options = document.querySelectorAll('.option');
+            
+            options.forEach((option, i) => {
+                option.style.pointerEvents = 'none';
+                if (i === question.correct) {
+                    option.classList.add('correct');
+                } else if (i === index) {
+                    option.classList.add('incorrect');
+                }
+            });
+            
+            // Show explanation
+            document.getElementById('explanation').classList.add('show');
+            
+            // Update score
+            if (index === question.correct) {
+                score++;
+            }
+            
+            // Store user answer
+            userAnswers.push({
+                question: question.question,
+                userAnswer: index,
+                correctAnswer: question.correct,
+                isCorrect: index === question.correct
+            });
+            
+            // Enable next button
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex < quizData.length) {
+                displayQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            clearInterval(timerInterval);
+            
+            document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultsScreen').style.display = 'block';
+            
+            const percentage = Math.round((score / quizData.length) * 100);
+            const correct = score;
+            const incorrect = quizData.length - score;
+            
+            // Update score display
+            document.getElementById('scoreDisplay').textContent = percentage + '%';
+            document.getElementById('correctCount').textContent = correct;
+            document.getElementById('incorrectCount').textContent = incorrect;
+            document.getElementById('scoreDetails').textContent = 
+                `You got ${correct} out of ${quizData.length} questions correct in ${document.getElementById('timer').textContent}.`;
+            
+            // Set score circle color and message
+            const scoreCircle = document.getElementById('scoreDisplay');
+            const scoreMessage = document.getElementById('scoreMessage');
+            
+            scoreCircle.className = 'score-circle ';
+            if (percentage >= 90) {
+                scoreCircle.classList.add('score-excellent');
+                scoreMessage.textContent = 'Excellent work! 🎉';
+            } else if (percentage >= 75) {
+                scoreCircle.classList.add('score-good');
+                scoreMessage.textContent = 'Great job! 👏';
+            } else if (percentage >= 60) {
+                scoreCircle.classList.add('score-average');
+                scoreMessage.textContent = 'Good effort! 👍';
+            } else {
+                scoreCircle.classList.add('score-poor');
+                scoreMessage.textContent = 'Keep practicing! 📚';
+            }
+        }
+
+        function restartQuiz() {
+            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('startScreen').style.display = 'block';
+            clearInterval(timerInterval);
+            document.getElementById('timer').textContent = '00:00';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('JavaScript Quiz loaded with', quizData.length, 'questions');
+        });
+    </script>
+</body>
+</html>

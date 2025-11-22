@@ -1,0 +1,68 @@
+
+SELECT c.first_name, s.status
+FROM Shippings s
+JOIN Customers c ON s.customer = c.customer_id;
+
+SELECT c.first_name, COUNT(o.order_id) AS total
+FROM Customers c
+LEFT JOIN Orders o ON c.customer_id = o.customer_id
+GROUP BY c.first_name;
+
+SELECT *
+FROM Customers
+WHERE age > 25;
+
+SELECT *
+FROM Customers
+WHERE first_name LIKE 'J%';
+
+SELECT country, COUNT(*) AS total
+FROM Customers
+GROUP BY country;
+
+SELECT c.first_name, o.item, s.status
+FROM Customers c
+JOIN Orders o ON c.customer_id = o.customer_id
+JOIN Shippings s ON c.customer_id = s.customer;
+
+SELECT c.first_name, c.last_name
+FROM Orders o
+JOIN Customers c ON o.customer_id = c.customer_id
+WHERE o.item = 'Keyboard';
+
+SELECT *
+FROM Orders
+WHERE customer_id NOT IN (SELECT customer FROM Shippings);
+
+SELECT c.first_name, c.last_name, s.status
+FROM Shippings s
+JOIN Customers c ON s.customer = c.customer_id
+WHERE s.status = 'Delivered';
+
+SELECT first_name, COUNT(*)
+FROM Customers
+GROUP BY first_name
+HAVING COUNT(*) > 1;
+
+SELECT *
+FROM Customers
+ORDER BY age ASC;
+
+SELECT c.country, COUNT(o.order_id) AS total
+FROM Orders o
+JOIN Customers c ON o.customer_id = c.customer_id
+GROUP BY c.country;
+
+SELECT country, COUNT(*) AS total
+FROM Customers
+GROUP BY country
+ORDER BY total DESC
+LIMIT 1;
+
+SELECT c.first_name, s.status
+FROM Customers c
+JOIN Shippings s ON c.customer_id = s.customer;
+
+SELECT *
+FROM Customers
+WHERE age > (SELECT AVG(age) FROM Customers);

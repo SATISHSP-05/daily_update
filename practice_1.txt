@@ -1,0 +1,59 @@
+SELECT * FROM Customers WHERE country = 'USA';
+
+SELECT *
+FROM Orders o
+JOIN Customers c ON o.customer_id = c.customer_id
+WHERE c.country = 'UK';
+
+SELECT *
+FROM Orders
+WHERE amount > 500;
+
+SELECT *
+FROM Orders
+ORDER BY amount DESC
+LIMIT 1;
+
+SELECT *
+FROM Customers
+WHERE customer_id NOT IN (SELECT customer_id FROM Orders);
+
+SELECT customer_id, COUNT(*) AS total_orders
+FROM Orders
+GROUP BY customer_id;
+
+SELECT *
+FROM Shippings
+WHERE status = 'Pending';
+
+SELECT c.first_name, c.last_name
+FROM Shippings s
+JOIN Customers c ON s.customer = c.customer_id
+WHERE s.status = 'Delivered';
+
+SELECT SUM(amount) AS total_amount
+FROM Orders;
+
+SELECT AVG(amount) AS avg_amount
+FROM Orders;
+
+SELECT *
+FROM Orders
+ORDER BY amount ASC
+LIMIT 1;
+
+SELECT customer_id
+FROM Orders
+GROUP BY customer_id
+HAVING COUNT(*) >= 2;
+
+SELECT DISTINCT country
+FROM Customers;
+
+SELECT c.first_name, c.last_name, o.item, o.amount
+FROM Orders o
+JOIN Customers c ON o.customer_id = c.customer_id;
+
+SELECT COUNT(*)
+FROM Shippings
+WHERE status = 'Pending';
