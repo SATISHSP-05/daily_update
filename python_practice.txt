@@ -1,0 +1,119 @@
+python is hight level interpreted ,general purpose programming language that is known for its simplility
+readbiliity and flexibility
+it was created by guido van rossum and first released in 1991
+
+-:Key Features of Python :-
+Simple & Readable
+Code looks like English, so it is easy to learn and maintain.
+
+Interpreted Language
+No compilation step. Code runs line by line.
+
+Cross-Platform
+Works on Windows, Mac, Linux without changes.
+
+Large Standard Library
+Provides built-in support for file handling, regex, networking, JSON, etc.
+
+Dynamically Typed
+You don’t need to declare data types.
+
+Extensible & Embedded
+You can write Python inside C/C++ or call C/C++ from Python.
+
+Memory Management through Garbage Collection
+Python has an automatic garbage collector to free unused memory.
+
+Portable Write once, run anywhere.
+
+Strong Community Support
+Large number of developers and libraries available.
+
+Advantages:
+Easy to learn and read
+Interpreted & cross-platform	
+Large standard library	
+Strong community support	
+Rapid development	
+Great for AI, ML, and Data Science	
+
+Disadvantages:
+Slower execution speed
+High memory usage
+Not ideal for mobile development
+Runtime errors possible
+Weak in multi-threading
+Weak in multi-threading
+Slower database access
+
+comment:-
+A comment in Python is a line of text ignored by the interpreter.
+It is used only for humans to read and understand the code, not for Python to execute.
+A comment is a piece of text in a program that starts with the symbol # or is enclosed
+in triple quotes (''' or """), used to explain the code.
+
+ 
+
+What is PEP 8?
+PEP 8 is the official style guide for writing clean and readable Python code.
+It defines rules for how Python code should be formatted so all developers follow a consistent style.
+
+
+
+PEP = Python Enhancement Proposal.
+PEP 8 defines coding standards (indentation, naming, spacing).
+
+
+What PEP 8 includes:
+4 spaces for indentation
+Snake_case for variables and functions
+CamelCase for classes
+Limit lines to 79 characters
+Proper spacing around operators
+Meaningful names
+
+2. What is a Virtual Environment?
+
+A virtual environment (venv) is an isolated Python workspace that contains its own Python version and libraries.
+It allows multiple projects to run different dependencies without conflicts.
+
+points:
+Helps avoid version mismatches
+Keeps project libraries separate
+Allows clean and reproducible setups
+Used heavily in web, ML, and automation projects
+
+
+3. What are Modules and Packages?
+A module is a single Python file (.py) that contains code — functions, variables, or classes.
+
+A package is a collection of multiple modules organized in a folder with an __init__.py file.
+
+"A module is one file, a package is a folder containing multiple related modules."
+
+
+
+
+Variable:
+a variable acts like a container or box that holds some data
+ (number, text, list, etc.) which can change during program execution.
+ ex:
+x = 10
+y = 20
+name = "satish"
+
+print(x)
+print(y)
+print(name)
+
+Variable names follow some rule:
+Must start with a letter or underscore 
+Cannot start with a number	
+Can contain letters, numbers, and underscores	
+Are case-sensitive	Age and age are different
+Cannot use Python keywords like if, for, class, etc
+
+
+
+
+
