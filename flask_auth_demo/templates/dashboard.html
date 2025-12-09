@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="text-center mt-5">
+
+    <h1 class="text-light fw-bold">Welcome, {{ username }} 👋</h1>
+    <p class="text-light fs-5">This is your secure dashboard.</p>
+
+    <div class="card-custom mt-4 mx-auto" style="max-width: 500px;">
+        <h4 class="text-title mb-3">API Usage</h4>
+
+        <p>Your JWT Login Endpoint:</p>
+
+        <pre class="p-3 bg-dark text-light rounded" style="font-size: 14px;">
+POST /api/login
+Content-Type: application/json
+
+{
+  "username": "{{ username }}",
+  "password": "your_password"
+}
+        </pre>
+    </div>
+
+</div>
+{% endblock %}
