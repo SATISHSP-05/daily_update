@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ post.title }}</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #134E5E, #71B280);
+            color: white;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: rgba(0,0,0,0.6);
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        h1 {
+            color: #ffd700;
+        }
+
+        a {
+            color: #ffd700;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    {% include "header.html" %}
+
+    <div class="container">
+        <h1>{{ post.title }}</h1>
+        <p>{{ post.content }}</p>
+
+        <p>
+            <a href="{{ url_for('blog_edit', post_id=post.id) }}">Edit</a> |
+            <a href="{{ url_for('blog_list') }}">Back to Blog</a>
+        </p>
+    </div>
+
+    {% include "footer.html" %}
+
+</body>
+</html>
