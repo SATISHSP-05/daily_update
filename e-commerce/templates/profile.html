@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - E-Commerce{% endblock %}
+
+{% block content %}
+<h2>Your Profile</h2>
+
+<div class="profile-card">
+    <p><strong>Full Name:</strong> {{ user.full_name }}</p>
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+</div>
+
+<a href="{{ url_for('main.index') }}" class="btn">Back to Home</a>
+{% endblock %}
