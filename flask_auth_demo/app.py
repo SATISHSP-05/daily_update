@@ -39,15 +39,12 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-# ====== Create DB (Flask 3.x FIX) ======
 # Runs once at startup
 with app.app_context():
     db.create_all()
 
 
-# ===========================
 #       HTML ROUTES
-# ===========================
 
 @app.route("/")
 def index():
@@ -114,9 +111,7 @@ def dashboard():
     return render_template("dashboard.html", username=current_user.username)
 
 
-# ===========================
 #      API (JWT) ROUTES
-# ===========================
 
 @app.route("/api/login", methods=["POST"])
 def api_login():
