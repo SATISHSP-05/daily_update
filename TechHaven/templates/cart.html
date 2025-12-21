@@ -29,7 +29,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="fw-bold">${{ product.price }}</td>
+                                <td class="fw-bold">₹{{ product.price }}</td>
                                 <td class="text-end pe-4">
                                     <a href="{{ url_for('remove_from_cart', product_id=product.id) }}" class="btn btn-outline-danger btn-sm" title="Remove item">
                                         <i class="bi bi-trash"></i>

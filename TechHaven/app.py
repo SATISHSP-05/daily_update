@@ -12,7 +12,7 @@ app.secret_key = 'your_secret_key'
 app.config['JWT_SECRET_KEY'] = 'super-secret-jwt-key'  
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']         
 app.config['JWT_COOKIE_CSRF_PROTECT'] = False          
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1) # <--- FIX 1: Token lasts 1 hour
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1) 
 
 # MySQL Config
 app.config['MYSQL_HOST'] = 'localhost'
@@ -146,6 +146,8 @@ def login():
 
         if account and check_password_hash(account['password'], password):
             access_token = create_access_token(identity=username)
+            
+            print("JWT TOKEN:", access_token) 
             resp = make_response(redirect(url_for('home')))
             set_access_cookies(resp, access_token)
             flash('Logged in successfully!', 'success')
