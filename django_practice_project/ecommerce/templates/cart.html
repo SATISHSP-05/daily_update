@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>Your Cart</h3>
+
+{% for item in items %}
+<div class="d-flex justify-content-between border p-2 mb-2">
+    <div>
+        {{ item.product.title }} - ₹{{ item.product.price }}
+    </div>
+    <a href="/remove-cart/{{ item.id }}/" class="btn btn-danger btn-sm">
+        Remove
+    </a>
+</div>
+{% endfor %}
+
+{% if items %}
+<a href="/place-order/" class="btn btn-success mt-3">
+    Place Order
+</a>
+{% else %}
+<p>Your cart is empty.</p>
+{% endif %}
+
+{% endblock %}
