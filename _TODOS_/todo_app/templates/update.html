@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Task</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f8f9fa; display: flex; justify-content: center; padding-top: 100px; }
+        .content { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 350px; text-align: center; }
+        input[type="text"] { width: 100%; padding: 12px; margin: 15px 0; border: 2px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        input[type="submit"] { background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; }
+        a { display: block; margin-top: 15px; color: #666; text-decoration: none; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h2>Update Task</h2>
+        <form action="/update/{{task.id}}" method="POST">
+            <input type="text" name="content" value="{{task.task_name}}" required autofocus>
+            <input type="submit" value="Save Changes">
+        </form>
+        <a href="/">← Cancel and go back</a>
+    </div>
+</body>
+</html>
